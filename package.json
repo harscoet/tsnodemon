@@ -1,0 +1,11 @@
+{
+  "name": "tsnodemon",
+  "version": "1.0.0",
+  "description": "Minimalist tool to watch and restart nodejs app with typescript",
+  "author": "Donovan Harscoet <donovan.harscoet@gmail.com> (https://github.com/harscoet/)",
+  "license": "MIT",
+  "main": "./lib/tsnodemon.js",
+  "bin": {
+    "tsnodemon": "./bin/tsnodemon.js"
+  }
+}

@@ -1,20 +1,18 @@
 #!/usr/bin/env node
+var program = require('commander');
 var path = require('path');
 var fs = require('fs');
 var tsnodemon = require('../lib/tsnodemon');
 
-var userArgs = process.argv.slice(2);
-var scriptArg = userArgs[0];
-var cwd = process.cwd();
-var relativeTsc = path.resolve(cwd, 'node_modules/typescript/lib/tsc.js');
-var tsc = fs.existsSync(relativeTsc) ? relativeTsc : 'tsc';
-var script;
+program
+  .version('0.1.0')
+  .option('-t, --tsc [value]', 'Tsc arguments. Default: --watch)', '--watch')
+  .option('-x, --exec [value]', 'Exec command. Default: node ["main" from package.json])')
+  .parse(process.argv);
 
-if (scriptArg) {
-  script = path.resolve(cwd, scriptArg);
-} else {
-  var packageJson = require(path.resolve(cwd, 'package.json')) || {};
-  script = packageJson.main;
+if (typeof program.exec === 'undefined') {
+  program.exec = 'node ' + (require(path.resolve(process.cwd(), 'package.json')) || {}).main || 'index.js';
 }
 
-tsnodemon.compileAndStart(tsc, script, userArgs);
+var execArr = program.exec.split(' ');
+tsnodemon.compileAndStart(program.tsc.split(' '), execArr[0], execArr.slice(1).concat(program.args));

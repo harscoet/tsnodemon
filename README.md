@@ -20,11 +20,11 @@ Add command in package.json
 
 ```json
 "scripts": {
-  "watch": "tsnodemon REPLACE_ENTRY_FILE.js"
+  "watch": "tsnodemon -x 'node REPLACE_ENTRY_FILE.js'"
 }
 ```
 
-You can remove "REPLACE_ENTRY_FILE.js" if you add "main" section in your package.json
+You can remove "-x" argument if you add "main" section in your package.json
 
 ```json
 {
@@ -35,7 +35,7 @@ You can remove "REPLACE_ENTRY_FILE.js" if you add "main" section in your package
   },
   "devDependencies": {
     "typescript": "^2.3.4",
-    "tsnodemon": "^1.0.0"
+    "tsnodemon": "^1.1.1"
   }
 }
 ```

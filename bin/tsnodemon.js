@@ -11,7 +11,38 @@ program
   .parse(process.argv);
 
 if (typeof program.exec === 'undefined') {
-  program.exec = 'node ' + (require(path.resolve(process.cwd(), 'package.json')) || {}).main || 'index.js';
+  var pathPackageJson = path.resolve(process.cwd(), 'package.json');
+  var packageJson = {};
+  var script = 'dist/index.js';
+
+  try {
+    packageJson = require(pathPackageJson);
+  } catch (e) {
+    // No package.json found
+  }
+
+  if (packageJson && packageJson.main) {
+    script = packageJson.main;
+  } else {
+    var pathTsconfigJson = path.resolve(process.cwd(), 'tsconfig.json');
+    var tsconfigJson = {};
+
+    try {
+      tsconfigJson = require(pathTsconfigJson);
+    } catch (e) {
+      // No tsconfig.json found
+    }
+
+    if (tsconfigJson && tsconfigJson.compilerOptions) {
+      if (tsconfigJson.compilerOptions.outFile) {
+        script = tsconfigJson.compilerOptions.outFile;
+      } else if (tsconfigJson.compilerOptions.outDir) {
+        script = path.join(tsconfigJson.compilerOptions.outDir, 'index.js');
+      }
+    }
+  }
+
+  program.exec = 'node ' + script;
 }
 
 var execArr = program.exec.split(' ');

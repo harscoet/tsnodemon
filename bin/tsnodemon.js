@@ -8,6 +8,7 @@ program
   .version('0.1.0')
   .option('-t, --tsc [value]', 'Tsc arguments. Default: --watch)', '--watch')
   .option('-x, --exec [value]', 'Exec command. Default: node ["main" from package.json])')
+  .option('-c, --colors', 'Display logs in colors')
   .parse(process.argv);
 
 if (typeof program.exec === 'undefined') {
@@ -46,4 +47,10 @@ if (typeof program.exec === 'undefined') {
 }
 
 var execArr = program.exec.split(' ');
-tsnodemon.compileAndStart(program.tsc.split(' '), execArr[0], execArr.slice(1).concat(program.args));
+
+tsnodemon.compileAndStart(
+  program.tsc.split(' '),
+  execArr[0],
+  execArr.slice(1).concat(program.args),
+  program.colors
+);
